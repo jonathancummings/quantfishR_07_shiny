@@ -5,9 +5,9 @@ account: jonathancummings
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 754492
-bundleId: 1909839
+bundleId: 1916844
 url: https://jonathancummings.shinyapps.io/quantfishR_07_shiny/
-when: 1551471543.85906
+when: 1551791201.62649
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: README.md

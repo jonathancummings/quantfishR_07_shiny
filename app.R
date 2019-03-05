@@ -15,6 +15,7 @@ ui <- fluidPage(
   navlistPanel(
     tabPanel("tab 1: Links and Shiny Template",
              h1("QuantfishR Shiny Workshop"),
+             h4("How To:"),
              p(strong("RStudio Shiny Cheatsheet:"), 
                a(href="https://shiny.rstudio.com/articles/cheatsheet.html",
                  "Cheatsheet link")),
@@ -22,33 +23,42 @@ ui <- fluidPage(
                a(href="https://shiny.rstudio.com/",
                  "https://shiny.rstudio.com/")),
              hr(),
+             h4("Data Sets:"),
              p("Data source, R4DS Tidy Tuesday:",
                a(href="https://github.com/rfordatascience/tidytuesday",
                  "Tidy Tuesday link")),
              hr(),
+             h4("Example Shiny Apps:"),
              p("Gallery of example Shiny applications. They come with code!",
                a(href="https://shiny.rstudio.com/gallery/",
                  "Shiny App Gallery")),
              p("Simple Shiny histogram example:",
                a(href="https://shiny.rstudio.com/gallery/single-file-shiny-app.html",
                  "histogram link"),
-               "Tab 1"),
+               "Tab 2"),
              p("Shiny Interactive Plot example:",
                a(href="https://shiny.rstudio.com/gallery/plot-interaction-basic.html",
                  "Interactive Plot link"),
-               "Tab 2"),
+               "Tab 3"),
+             p("Jonathan's Town Meeting Tax App:",
+               a(href="https://jonathancummings.shinyapps.io/NottinghamTaxCalculator/",
+                 "Link")),
+             p("Jonathan's Management Strategy Evaluation Review App:",
+               a(href="https://jonathancummings.shinyapps.io/MSEreview/",
+                 "Link")),
              hr(),
              p("Shiny Template:"),
              p(code("library(shiny)")),
              p(code("ui <- fluidPage() # end fluidPage")),
              p(code("server <- function(input, output) {} # end server")),
-             p(code("shinyApp(ui = ui, server = server)")),
-             hr(),
+             p(code("shinyApp(ui = ui, server = server)"))
+             ), # end tabPanel
+    tabPanel("tab 2: Histogram Example",
              h4("Example Interactives"),
              numericInput('n', 'Number of obs', n),
              plotOutput('plot')
              ), # end tabPanel
-    tabPanel("tab 2",
+    tabPanel("tab 3: Plot Interactives Example",
              # Some custom CSS for a smaller font for preformatted text
              tags$head(
                tags$style(HTML("
@@ -95,10 +105,7 @@ ui <- fluidPage(
                column(width = 3,
                       verbatimTextOutput("brush_info")
                )
-             )), # end tabPanel
-    tabPanel("tab 3",
-             p(code("phd_field <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-02-19/phd_by_field.csv')"))
-             )
+             )) # end tabPanel
   )# end navlistPanel
 )# end fluidpage UI
 

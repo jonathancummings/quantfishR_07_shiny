@@ -7,8 +7,18 @@ library(tidyverse)
 # Global variables can go here
 n <- 200
 
-phd_field <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-02-19/phd_by_field.csv")
+phd_field <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-02-19/phd_by_field.csv") %>% 
+  mutate(year = as.integer(year))
 
+# summarized by broad field
+phd2 <- phd_field %>%
+  group_by(broad_field, year) %>% 
+  summarize(n = sum(n_phds, na.rm = TRUE))
+
+# summarized by broad and major field for second plot
+phd3 <- phd_field %>%
+  group_by(broad_field, major_field, year) %>% 
+  summarize(n = sum(n_phds, na.rm = TRUE))
 
 # Define UI ----
 ui <- fluidPage(
@@ -105,7 +115,32 @@ ui <- fluidPage(
                column(width = 3,
                       verbatimTextOutput("brush_info")
                )
-             )) # end tabPanel
+             )), # end tabPanel
+    tabPanel("tab 4: Hart Fay Example",
+             # Application title
+             titlePanel("Awarded PhDs by Field"),
+             
+             # Sidebar with a slider input for number of bins 
+             sidebarLayout(
+               sidebarPanel(
+                 sliderInput("startyr",
+                             "Starting year:",
+                             min = min(phd2$year),
+                             max = max(phd2$year),
+                             value = mean(phd2$year),
+                             step = 1,           # make step size of 1 year
+                             sep = ""),          # get rid of thousand "," separator
+                 selectInput("bfield",
+                             "Select broad field",
+                             choices = unique(phd3$broad_field))
+               ),
+               
+               # Show a plot of the generated distribution
+               mainPanel(
+                 plotOutput("distPlot"),
+                 plotOutput("majorPlot")
+               )
+             )) # End TabPanel
   )# end navlistPanel
 )# end fluidpage UI
 
@@ -137,6 +172,21 @@ server <- function(input, output) {
   output$brush_info <- renderPrint({
     cat("input$plot_brush:\n")
     str(input$plot_brush)
+  })
+  
+  output$distPlot <- renderPlot({ # curly brackets make this 1 expression
+    # plot we want
+    ggplot(data=filter(phd2,year >= input$startyr),
+           aes(x=year, y=n, color=broad_field, group=broad_field)) +
+      geom_line() +
+      ggtitle("Number of PhDs Awarded by Broad Field")
+  })
+  
+  output$majorPlot <- renderPlot({
+    ggplot(data=filter(phd3, broad_field == input$bfield),
+           aes(x=year, y=n, color=major_field, group=major_field)) +
+      geom_line() +
+      ggtitle(paste("PhDs Awarded Within", input$bfield))
   })
   
   } # end server
